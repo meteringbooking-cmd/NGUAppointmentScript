@@ -39,87 +39,8 @@
             margin-bottom: 10px;
         }
         
-        .search-section {
-            padding: 30px;
-            background: #f8f9fa;
-            border-bottom: 2px solid #e9ecef;
-        }
-        
-        .search-box {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .search-box input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        
-        .search-box input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .search-box button {
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .search-box button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .search-box button:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .status {
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-size: 14px;
-            text-align: center;
-        }
-        
-        .status.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        .status.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .status.info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-        
         .script-section {
             padding: 30px;
-            display: none;
-        }
-        
-        .script-section.active {
-            display: block;
         }
         
         .script-step {
@@ -159,68 +80,20 @@
             margin-top: 10px;
             border-left: 3px solid #2196F3;
         }
-        
-        .customer-info {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            border: 2px solid #667eea;
-        }
-        
-        .customer-info h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-        }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        
-        .info-item {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .info-label {
-            font-size: 12px;
-            color: #6c757d;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 5px;
-        }
-        
-        .info-value {
-            font-size: 16px;
-            color: #333;
-            font-weight: 600;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📞 Call Centre Agent Script</h1>
+            <h1>📞 Appointment Booking Script</h1>
             <p>Smart Meter Exchange Appointment</p>
         </div>
         
-        <div class="search-section">
-            <div class="search-box">
-                <input type="text" id="phoneInput" placeholder="Enter customer phone number..." />
-                <button id="searchBtn" onclick="searchCustomer()">Search</button>
-            </div>
-            <div id="status"></div>
-        </div>
-        
-        <div class="script-section" id="scriptSection">
-            <div class="customer-info" id="customerInfo"></div>
-            
+        <div class="script-section">
             <div class="script-step">
                 <h3>1. Opening & Introduction</h3>
                 <div class="script-text">
-                    Good morning/afternoon, my name is <span class="highlight">[Agent Name]</span> and I'm calling you from <span class="highlight" id="companyName1">[Company Name]</span>.
+                    Good morning/afternoon, my name is <span class="highlight">[Agent Name]</span> and I'm calling you from <span class="highlight">[Company Name]</span>.
                     <br><br>
                     I'm calling today about your upcoming need to exchange your smart meter. We need to schedule this appointment now to make sure your metering system stays accurate and compliant.
                 </div>
@@ -231,7 +104,7 @@
                 <div class="script-text">
                     To confirm I'm speaking with the account holder, could you please tell me the first line of your address and your postcode?
                     <br><br>
-                    Thank you for confirming that, <span class="highlight" id="customerName1">[Customer Name]</span>.
+                    Thank you for confirming that, <span class="highlight">[Customer Name]</span>.
                 </div>
             </div>
             
@@ -242,7 +115,7 @@
                     <br><br>
                     We will need clear, safe, and easy access to where your current electricity and gas meters are located. It's helpful if the area is clutter-free before our engineer arrives.
                     <br><br>
-                    The appointment will be conducted by one of our fully qualified and background-checked <span class="highlight" id="companyName2">[Company Name]</span> engineers.
+                    The appointment will be conducted by one of our fully qualified and background-checked <span class="highlight">[Company Name]</span> engineers.
                 </div>
             </div>
             
@@ -277,138 +150,10 @@
                 <div class="script-text">
                     Do you have any questions for me about the process, the engineer's visit, or what you need to do before they arrive?
                     <br><br>
-                    Thank you very much for your time today, <span class="highlight" id="customerName2">[Customer Name]</span>. We look forward to completing your smart meter exchange on <strong>[Date]</strong>. Have a great day!
+                    Thank you very much for your time today, <span class="highlight">[Customer Name]</span>. We look forward to completing your smart meter exchange on <strong>[Date]</strong>. Have a great day!
                 </div>
             </div>
         </div>
     </div>
-    
-    <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzt_YC8oU_y_8jQJBeVNoWGBIZljQrn6YicBZGhJ0Hcrvt7k264RVZjYb8DnPNeFrT_/exec?action=read';
-        let customerData = null;
-        
-        document.getElementById('phoneInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchCustomer();
-            }
-        });
-        
-        function normalizePhone(phone) {
-            // Remove all non-digit characters for comparison
-            return phone.toString().replace(/\D/g, '');
-        }
-        
-        async function searchCustomer() {
-            const phoneNumber = document.getElementById('phoneInput').value.trim();
-            const statusDiv = document.getElementById('status');
-            const searchBtn = document.getElementById('searchBtn');
-            
-            if (!phoneNumber) {
-                showStatus('Please enter a phone number', 'error');
-                return;
-            }
-            
-            searchBtn.disabled = true;
-            searchBtn.textContent = 'Searching...';
-            showStatus('Searching for customer...', 'info');
-            
-            try {
-                const response = await fetch(API_URL);
-                let data = await response.json();
-                
-                console.log('Raw data received:', data);
-                console.log('Data type:', typeof data);
-                
-                // Handle different data structures
-                if (data.data && Array.isArray(data.data)) {
-                    data = data.data;
-                } else if (!Array.isArray(data)) {
-                    console.error('Data is not an array:', data);
-                    showStatus('Error: Invalid data format received from server', 'error');
-                    return;
-                }
-                
-                console.log('Processing array with', data.length, 'rows');
-                console.log('First row sample:', data[0]);
-                console.log('Searching for phone:', phoneNumber);
-                
-                // Normalize the search phone number
-                const normalizedSearch = normalizePhone(phoneNumber);
-                
-                // Phone number is in column E (index 4)
-                let customer = null;
-                for (let i = 0; i < data.length; i++) {
-                    const row = data[i];
-                    if (row[4]) {
-                        const normalizedRow = normalizePhone(row[4]);
-                        console.log(`Row ${i} phone:`, row[4], '-> normalized:', normalizedRow);
-                        if (normalizedRow === normalizedSearch) {
-                            customer = row;
-                            console.log('Match found at row', i);
-                            break;
-                        }
-                    }
-                }
-                
-                if (customer) {
-                    console.log('Customer found:', customer);
-                    customerData = {
-                        contactName: customer[3] || '[Customer Name]', // Column D
-                        phone: customer[4] || '', // Column E
-                        site: customer[6] || '[Company Name]', // Column G
-                        rawData: customer // Store raw data for debugging
-                    };
-                    
-                    populateScript();
-                    showStatus('Customer found! Script loaded.', 'success');
-                    document.getElementById('scriptSection').classList.add('active');
-                } else {
-                    console.log('No customer found');
-                    showStatus('No customer found with that phone number. Check browser console for details.', 'error');
-                    document.getElementById('scriptSection').classList.remove('active');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showStatus('Error loading customer data. Please try again. Check console for details.', 'error');
-            } finally {
-                searchBtn.disabled = false;
-                searchBtn.textContent = 'Search';
-            }
-        }
-        
-        function populateScript() {
-            // Populate customer info box
-            document.getElementById('customerInfo').innerHTML = `
-                <h3>Customer Information</h3>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">Customer Name</span>
-                        <span class="info-value">${customerData.contactName}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Phone Number</span>
-                        <span class="info-value">${customerData.phone}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Company/Site</span>
-                        <span class="info-value">${customerData.site}</span>
-                    </div>
-                </div>
-            `;
-            
-            // Populate script placeholders
-            document.getElementById('companyName1').textContent = customerData.site;
-            document.getElementById('companyName2').textContent = customerData.site;
-            document.getElementById('customerName1').textContent = customerData.contactName;
-            document.getElementById('customerName2').textContent = customerData.contactName;
-        }
-        
-        function showStatus(message, type) {
-            const statusDiv = document.getElementById('status');
-            statusDiv.textContent = message;
-            statusDiv.className = `status ${type}`;
-            statusDiv.style.display = 'block';
-        }
-    </script>
 </body>
 </html>

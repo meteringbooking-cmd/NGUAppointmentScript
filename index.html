@@ -314,24 +314,41 @@
             
             try {
                 const response = await fetch(API_URL);
-                const data = await response.json();
+                let data = await response.json();
                 
-                console.log('Data received:', data);
-                console.log('Total rows:', data.length);
+                console.log('Raw data received:', data);
+                console.log('Data type:', typeof data);
+                
+                // Handle different data structures
+                if (data.data && Array.isArray(data.data)) {
+                    data = data.data;
+                } else if (!Array.isArray(data)) {
+                    console.error('Data is not an array:', data);
+                    showStatus('Error: Invalid data format received from server', 'error');
+                    return;
+                }
+                
+                console.log('Processing array with', data.length, 'rows');
+                console.log('First row sample:', data[0]);
                 console.log('Searching for phone:', phoneNumber);
                 
                 // Normalize the search phone number
                 const normalizedSearch = normalizePhone(phoneNumber);
                 
                 // Phone number is in column E (index 4)
-                const customer = data.find(row => {
+                let customer = null;
+                for (let i = 0; i < data.length; i++) {
+                    const row = data[i];
                     if (row[4]) {
                         const normalizedRow = normalizePhone(row[4]);
-                        console.log('Comparing:', normalizedRow, 'with', normalizedSearch);
-                        return normalizedRow === normalizedSearch;
+                        console.log(`Row ${i} phone:`, row[4], '-> normalized:', normalizedRow);
+                        if (normalizedRow === normalizedSearch) {
+                            customer = row;
+                            console.log('Match found at row', i);
+                            break;
+                        }
                     }
-                    return false;
-                });
+                }
                 
                 if (customer) {
                     console.log('Customer found:', customer);

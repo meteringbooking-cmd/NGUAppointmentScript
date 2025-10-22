@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call Centre Script</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .search-section {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .search-box button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .search-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .search-box button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status {
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .script-section {
+            padding: 30px;
+            display: none;
+        }
+        
+        .script-section.active {
+            display: block;
+        }
+        
+        .script-step {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+        }
+        
+        .script-step h3 {
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .script-text {
+            line-height: 1.8;
+            color: #333;
+            font-size: 15px;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+            color: #856404;
+        }
+        
+        .optional {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+            border-left: 3px solid #2196F3;
+        }
+        
+        .customer-info {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border: 2px solid #667eea;
+        }
+        
+        .customer-info h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-label {
+            font-size: 12px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 16px;
+            color: #333;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📞 Call Centre Agent Script</h1>
+            <p>Smart Meter Exchange Appointment</p>
+        </div>
+        
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" id="phoneInput" placeholder="Enter customer phone number..." />
+                <button id="searchBtn" onclick="searchCustomer()">Search</button>
+            </div>
+            <div id="status"></div>
+        </div>
+        
+        <div class="script-section" id="scriptSection">
+            <div class="customer-info" id="customerInfo"></div>
+            
+            <div class="script-step">
+                <h3>1. Opening & Introduction</h3>
+                <div class="script-text">
+                    Good morning/afternoon, my name is <span class="highlight">[Agent Name]</span> and I'm calling you from <span class="highlight" id="companyName1">[Company Name]</span>.
+                    <br><br>
+                    I'm calling today about your upcoming need to exchange your smart meter. We need to schedule this appointment now to make sure your metering system stays accurate and compliant.
+                </div>
+            </div>
+            
+            <div class="script-step">
+                <h3>2. Verification</h3>
+                <div class="script-text">
+                    To confirm I'm speaking with the account holder, could you please tell me the first line of your address and your postcode?
+                    <br><br>
+                    Thank you for confirming that, <span class="highlight" id="customerName1">[Customer Name]</span>.
+                </div>
+            </div>
+            
+            <div class="script-step">
+                <h3>3. Appointment Details</h3>
+                <div class="script-text">
+                    The exchange appointment usually takes our engineer about <strong>1 to 2 hours</strong> to complete. Please note that your power will need to be switched off for a short period, typically <strong>30 to 45 minutes</strong>, for the work to be done safely.
+                    <br><br>
+                    We will need clear, safe, and easy access to where your current electricity and gas meters are located. It's helpful if the area is clutter-free before our engineer arrives.
+                    <br><br>
+                    The appointment will be conducted by one of our fully qualified and background-checked <span class="highlight" id="companyName2">[Company Name]</span> engineers.
+                </div>
+            </div>
+            
+            <div class="script-step">
+                <h3>4. Scheduling Options</h3>
+                <div class="script-text">
+                    I have two slots available next week: would <strong>Monday, [Date]</strong> or <strong>Thursday, [Date]</strong> work better for you?
+                    
+                    <div class="optional">
+                        <strong>If chosen:</strong><br>
+                        Perfect. I can book that for <strong>[Day], [Date]</strong> in the <strong>morning (8 AM - 1 PM)</strong> slot.
+                    </div>
+                    
+                    <div class="optional" style="margin-top: 10px;">
+                        <strong>If declined:</strong><br>
+                        No problem at all. Let's look further out. How about <strong>Tuesday, [Date]</strong>, in the <strong>afternoon (1 PM - 6 PM)</strong>?
+                    </div>
+                </div>
+            </div>
+            
+            <div class="script-step">
+                <h3>5. Confirmation</h3>
+                <div class="script-text">
+                    Great. I have now booked your smart meter exchange for <strong>[Day of the week], [Date]</strong>, in the <strong>[Morning/Afternoon]</strong> slot.
+                    <br><br>
+                    You will receive an email or letter confirmation with all these details, including the date, time window, and a contact number, within the next <strong>24 hours</strong>.
+                </div>
+            </div>
+            
+            <div class="script-step">
+                <h3>6. Questions & Closing</h3>
+                <div class="script-text">
+                    Do you have any questions for me about the process, the engineer's visit, or what you need to do before they arrive?
+                    <br><br>
+                    Thank you very much for your time today, <span class="highlight" id="customerName2">[Customer Name]</span>. We look forward to completing your smart meter exchange on <strong>[Date]</strong>. Have a great day!
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzt_YC8oU_y_8jQJBeVNoWGBIZljQrn6YicBZGhJ0Hcrvt7k264RVZjYb8DnPNeFrT_/exec';
+        let customerData = null;
+        
+        document.getElementById('phoneInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchCustomer();
+            }
+        });
+        
+        async function searchCustomer() {
+            const phoneNumber = document.getElementById('phoneInput').value.trim();
+            const statusDiv = document.getElementById('status');
+            const searchBtn = document.getElementById('searchBtn');
+            
+            if (!phoneNumber) {
+                showStatus('Please enter a phone number', 'error');
+                return;
+            }
+            
+            searchBtn.disabled = true;
+            searchBtn.textContent = 'Searching...';
+            showStatus('Searching for customer...', 'info');
+            
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                // Phone number is in column E (index 4)
+                const customer = data.find(row => row[4] && row[4].toString().trim() === phoneNumber);
+                
+                if (customer) {
+                    customerData = {
+                        contactName: customer[3] || '[Customer Name]', // Column D
+                        phone: customer[4] || '', // Column E
+                        site: customer[6] || '[Company Name]' // Column G
+                    };
+                    
+                    populateScript();
+                    showStatus('Customer found! Script loaded.', 'success');
+                    document.getElementById('scriptSection').classList.add('active');
+                } else {
+                    showStatus('No customer found with that phone number.', 'error');
+                    document.getElementById('scriptSection').classList.remove('active');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('Error loading customer data. Please try again.', 'error');
+            } finally {
+                searchBtn.disabled = false;
+                searchBtn.textContent = 'Search';
+            }
+        }
+        
+        function populateScript() {
+            // Populate customer info box
+            document.getElementById('customerInfo').innerHTML = `
+                <h3>Customer Information</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Customer Name</span>
+                        <span class="info-value">${customerData.contactName}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Phone Number</span>
+                        <span class="info-value">${customerData.phone}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Company/Site</span>
+                        <span class="info-value">${customerData.site}</span>
+                    </div>
+                </div>
+            `;
+            
+            // Populate script placeholders
+            document.getElementById('companyName1').textContent = customerData.site;
+            document.getElementById('companyName2').textContent = customerData.site;
+            document.getElementById('customerName1').textContent = customerData.contactName;
+            document.getElementById('customerName2').textContent = customerData.contactName;
+        }
+        
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

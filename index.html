@@ -202,7 +202,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>📞 Appointment Booking Script</h1>
+            <h1>📞 Call Centre Agent Script</h1>
             <p>Smart Meter Exchange Appointment</p>
         </div>
         
@@ -293,6 +293,11 @@
             }
         });
         
+        function normalizePhone(phone) {
+            // Remove all non-digit characters for comparison
+            return phone.toString().replace(/\D/g, '');
+        }
+        
         async function searchCustomer() {
             const phoneNumber = document.getElementById('phoneInput').value.trim();
             const statusDiv = document.getElementById('status');
@@ -311,26 +316,43 @@
                 const response = await fetch(API_URL);
                 const data = await response.json();
                 
+                console.log('Data received:', data);
+                console.log('Total rows:', data.length);
+                console.log('Searching for phone:', phoneNumber);
+                
+                // Normalize the search phone number
+                const normalizedSearch = normalizePhone(phoneNumber);
+                
                 // Phone number is in column E (index 4)
-                const customer = data.find(row => row[4] && row[4].toString().trim() === phoneNumber);
+                const customer = data.find(row => {
+                    if (row[4]) {
+                        const normalizedRow = normalizePhone(row[4]);
+                        console.log('Comparing:', normalizedRow, 'with', normalizedSearch);
+                        return normalizedRow === normalizedSearch;
+                    }
+                    return false;
+                });
                 
                 if (customer) {
+                    console.log('Customer found:', customer);
                     customerData = {
                         contactName: customer[3] || '[Customer Name]', // Column D
                         phone: customer[4] || '', // Column E
-                        site: customer[6] || '[Company Name]' // Column G
+                        site: customer[6] || '[Company Name]', // Column G
+                        rawData: customer // Store raw data for debugging
                     };
                     
                     populateScript();
                     showStatus('Customer found! Script loaded.', 'success');
                     document.getElementById('scriptSection').classList.add('active');
                 } else {
-                    showStatus('No customer found with that phone number.', 'error');
+                    console.log('No customer found');
+                    showStatus('No customer found with that phone number. Check browser console for details.', 'error');
                     document.getElementById('scriptSection').classList.remove('active');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                showStatus('Error loading customer data. Please try again.', 'error');
+                showStatus('Error loading customer data. Please try again. Check console for details.', 'error');
             } finally {
                 searchBtn.disabled = false;
                 searchBtn.textContent = 'Search';
